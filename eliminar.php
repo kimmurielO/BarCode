@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+	<title>Eliminar producto de inventario</title>
+	<link rel="stylesheet" href="./estilo.css">
+</head>
+<body>
+
+<header><h1 style={position:relative}>Inventario</h1></header>
+
+<nav> 
+    <ul>
+        <li><a href="./eliminar.php"> Eliminar </a></li>
+        <li><a href="./insertar.php"> Agregar </a></li>
+        <li><a href=""> Mostrar </a></li>
+    </ul>
+</nav>
+
+<section>
+
+
+
+<h2>Eliminar del inventario</h2>
+
+<form method="POST" action="" onsubmit="return validaciones();">
+	<label for="codigoBarras"> Escanea el codigo de barras: </label>
+	<input type="text" name="codigoBarras" id="codigoBarras" onfocus="myFunction(this)" required><br><br>
+	<label for="fname"> Tipo de producto:</label>
+	<input type="text" name="fname" required><br><br>
+	<label for="cantE>"> Cantidad:</label>
+	<input type="text" name="cantE" id="cantE" required><br><br>
+	<label for="marca"> Marca:</label>
+	<input type="text" name="marca" id="marca" required><br><br>
+	<label for="proveedor"> Proveedor:</label>
+	<input type="text" name="proveedor" id="proveedor" required><br><br>
+ 	<input type="submit" name="submit" value="Eliminar">
+</form>
+
+
+</section>
+
+<script>
+
+	function validaciones(){
+
+		var valor2 = document.getElementById("cantE").value;
+
+		if (valor2 != ""){
+
+			var valoresAceptados = /^[0-9]+$/;
+			if (valor2.match(valoresAceptados)){
+				alert ("Es numérico");
+				return true;
+			} else {
+         		alert ("La cantidad debe ser numérica");
+         		return false;
+    		}
+
+		}
+	}
+
+</script>
+
+<?php
+
+class MiBD extends SQLite3
+{
+    function __construct()
+    {
+        $this->open('test.db');
+    }
+}
+
+if(isset($_POST["submit"])){
+
+		$tipoProd = $_POST["fname"];
+		$codigoBarras = $_POST["codigoBarras"];
+		$cantidadE = - $_POST["cantE"];
+		$marca = $_POST["marca"];
+		$proveedor = $_POST["proveedor"];
+
+		$db = new MiBD();
+
+		$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
+
+
+		$cantidad = $db->query("SELECT SUM(CantidadInicial) FROM Almacen WHERE CodigoDeBarras = $codigoBarras");
+		$cantidad2 = $cantidad -> fetchArray();
+		$totalCant = $cantidad2[0] + $cantidadE;
+
+		if($cantidad2[0] < 0){
+			alert("No hay suficientes existencias en almacen");
+		}
+		else{
+			$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, Cantidad, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras', '$totalCant' ,'$cantidadE', '$marca', '$proveedor');");
+		}
+
+
+		$db->close();
+		unset($_POST['submit']);
+		$url = 'eliminar.php';
+		header('Location: '.$url);
+}
+
+?>
+
+</body>
+</html>
