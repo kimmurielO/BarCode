@@ -13,24 +13,29 @@ $bd = new MiBD();
 
 $resultado = $bd->query("SELECT * FROM Almacen");
 
-
 //var_dump($resultado->fetchArray());
 
+echo "<table>";
+echo "<tr>";
+echo "<th> Tipo de producto </th>";
+echo "<th> Codigo de barras </th>";
+echo "<th> Cantidad inicial </th>";
+echo "<th> Cantidad actual </th>";
+echo "<th> Marca </th>";
+echo "<th> Proveedor </th>";
+echo "</tr>";
+echo "<br>";
 
 while ($row = $resultado->fetchArray()) {
-    //var_dump($row);
-
-    // Esto es tipo de producto?
-    $nombre = $row[0];
-    //var_dump($row[0]);
     echo "<tr>";
-    print_r($nombre[0]);
+    echo "<td> $row[0] </td>";
+    echo "<td> $row[1] </td>";
+    echo "<td> $row[2] </td>";
+    echo "<td> $row[3] </td>";
+    echo "<td> $row[4] </td>";
+    echo "<td> $row[5] </td>";
     echo "</tr>";
 }
-
-
-$filas = sqlite_num_fields($resultado);
-
-echo "Number of rows: $filas";
+echo "</table>";
 
 ?>
