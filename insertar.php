@@ -25,7 +25,7 @@
 
 <form enctype="multipart/form-data" method="POST" action="" onsubmit="return validaciones();">
 	<label for="codigoBarras"> Escanea el codigo de barras: </label>
-	<input type="text" name="codigoBarras" id="codigoBarras" onfocus="myFunction(this)" required><br><br>
+	<input type="text" name="codigoBarras" id="codigoBarras" required><br><br>
 	<label for="fname">Tipo de producto:</label>
 	<input type="text" name="fname" required><br><br>
 	<label for="cantI>"> Cantidad:</label>
@@ -35,6 +35,7 @@
 	<label for="proveedor"> Proveedor:</label>
 	<input type="text" name="proveedor" id="proveedor" required><br><br>
 	<label for="fotoP"> Foto:</label>
+	<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
 	<input type="file" name="fotoP" id="fotoP"><br><br>
 	<label for="descrip"> Descripción del producto:</label>
 	<textarea name="descrip" placeholder="Escribe una breve descripción"></textarea><br><br>
@@ -54,7 +55,7 @@
 
 			var valoresAceptados = /^[0-9]+$/;
 			if (valor2.match(valoresAceptados)){
-				alert ("Es numérico");
+				//alert ("Es numérico");
 				return true;
 			} else {
          		alert ("La cantidad debe ser numérica");
@@ -68,15 +69,15 @@
 
 <?php
 
-class MiBD extends SQLite3
-{
-    function __construct()
-    {
-        $this->open('test.db');
-    }
-}
+	class MiBD extends SQLite3
+	{
+	    function __construct()
+	    {
+	        $this->open('test.db');
+	    }
+	}
 
-if(isset($_POST["submit"])){
+	if(isset($_POST["submit"])){
 
 		$tipoProd = $_POST["fname"];
 		$codigoBarras = $_POST["codigoBarras"];
@@ -90,51 +91,55 @@ if(isset($_POST["submit"])){
 		$directorio_destino = "./Imagenes";
 
 		$nombreFoto = $codigoBarras . $img_file;
+		if( $_FILES['fotoP']['size'] > 800000 ) {
+  			echo "<script type='text/javascript'>alert('No se pueden subir archivos con pesos mayores a 800kB');</script>";
+		} else {
 
-    	if (((strpos($img_type, "gif") || strpos($img_type, "jpeg") ||
- 			strpos($img_type, "jpg")) || strpos($img_type, "png")))
-    	{
-        	if ( strpos($img_type, "jpeg") || strpos($img_type, "jpg") || strpos($img_type, "png") )
-        	{
-            	if (move_uploaded_file($tmp_name, $directorio_destino . '/' . $nombreFoto))
-            	{
-            		// Si llegamos aqui hemos insertado la imagen
+	    	if (((strpos($img_type, "gif") || strpos($img_type, "jpeg") ||
+	 			strpos($img_type, "jpg")) || strpos($img_type, "png")))
+	    	{
+	        	if ( strpos($img_type, "jpeg") || strpos($img_type, "jpg") || strpos($img_type, "png") )
+	        	{
+	            	if (move_uploaded_file($tmp_name, $directorio_destino . '/' . $nombreFoto))
+	            	{
+	            		// Si llegamos aqui hemos insertado la imagen
 
-            		$db2 = new MiBD();
+	            		$db2 = new MiBD();
 
-            		echo $nombreFoto;
+	            		echo $nombreFoto;
 
-            		$db2->exec("INSERT INTO Recordar (CodigoDeBarras, FotoP) VALUES ('$codigoBarras', '$nombreFoto');");
+	            		$db2->exec("INSERT INTO Recordar (CodigoDeBarras, FotoP) VALUES ('$codigoBarras', '$nombreFoto');");
 
-            		$db2->close();
-       	     	}
-        	}
-    	}
+	            		$db2->close();
+	       	     	}
+	        	}
+	    	}
 
-    	/* Si llegamos hasta aquí es que algo ha fallado algo que tiene que ver con la imagen o bien no se ha insertado ninguna */
-    	
-    	$db = new MiBD();
+	    	/* No hemos contemplado que algo que tiene que ver con la imagen haya fallado (a excepción del numero de bytes del documento) o bien no se ha insertado ninguna */
+	    	
+	    	$db = new MiBD();
 
-		$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
+			$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
 
 
-		$cantidad = $db->query("SELECT SUM(CantidadInicial) FROM Almacen WHERE CodigoDeBarras = $codigoBarras");
-		$cantidad2 = $cantidad -> fetchArray();
-		$totalCant = $cantidad2[0] + $cantidadI;
+			$cantidad = $db->query("SELECT SUM(CantidadInicial) FROM Almacen WHERE CodigoDeBarras = $codigoBarras");
+			$cantidad2 = $cantidad -> fetchArray();
+			$totalCant = $cantidad2[0] + $cantidadI;
 
-		if($cantidad2[0] < 0){
-			alert("No hay suficientes existencias en almacen");
-					}
-		else{
-			$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, Cantidad, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras', '$totalCant' ,'$cantidadI', '$marca', '$proveedor');");
+			if($cantidad2[0] < 0){
+				echo "<script type='text/javascript'>alert('No hay suficientes existencias en almacen');</script>";
+			}
+			else{
+				$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, Cantidad, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras', '$totalCant' ,'$cantidadI', '$marca', '$proveedor');");
+			}
+
+			$db->close();
+			unset($_POST['submit']);
+			$url = 'insertar.php';
+			header('Location: '.$url);
+
 		}
-
-
-		$db->close();
-		unset($_POST['submit']);
-		$url = 'insertar.php';
-		header('Location: '.$url);
-}
+	}
 
 ?>
 
