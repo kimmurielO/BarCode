@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+    <title>Tabla inventario</title>
+    <link rel="stylesheet" href="./estilo.css">
+</head>
+<body>
+
+<header><h1 style={position:relative}>Inventario</h1></header>
+
+<nav> 
+    <ul>
+        <li><a href="./eliminar.php"> Eliminar </a></li>
+        <li><a href="./insertar.php"> Agregar </a></li>
+        <li><a href="./mostrarDP.php"> Mostrar </a></li>
+    </ul>
+</nav>
+
 <?php
 
 
@@ -39,3 +58,6 @@ while ($row = $resultado->fetchArray()) {
 echo "</table>";
 
 ?>
+
+</body>
+</html>
