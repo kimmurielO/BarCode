@@ -90,55 +90,100 @@
 		$tmp_name = $_FILES['fotoP']['tmp_name'];
 		$directorio_destino = "./Imagenes";
 
+		$contador = 0;
 		$nombreFoto = $codigoBarras . $img_file;
-		if( $_FILES['fotoP']['size'] > 800000 ) {
-  			echo "<script type='text/javascript'>alert('No se pueden subir archivos con pesos mayores a 800kB');</script>";
-		} else {
 
-	    	if (((strpos($img_type, "gif") || strpos($img_type, "jpeg") ||
-	 			strpos($img_type, "jpg")) || strpos($img_type, "png")))
-	    	{
-	        	if ( strpos($img_type, "jpeg") || strpos($img_type, "jpg") || strpos($img_type, "png") )
-	        	{
-	            	if (move_uploaded_file($tmp_name, $directorio_destino . '/' . $nombreFoto))
-	            	{
-	            		// Si llegamos aqui hemos insertado la imagen
+		$db3 = new MiBD();
+	    $codigosF = $db3->query("SELECT CodigoDeBarras FROM Recordar");
+		while($codigosI = $codigosF->fetchArray()){
+			if ($codigosI[0] == $codigoBarras){
+				$contador++;
+			}
+	    }
 
-	            		$db2 = new MiBD();
+	    function guardarFoto(){
 
-	            		echo $nombreFoto;
+			if( $_FILES['fotoP']['size'] > 800000 ) {
+	  			echo "<script type='text/javascript'>alert('No se pueden subir archivos con pesos mayores a 800kB');</script>";
+			} else {
+				global $img_type;
+				global $tmp_name;
+				global $directorio_destino;
+				global $nombreFoto;
 
-	            		$db2->exec("INSERT INTO Recordar (CodigoDeBarras, FotoP) VALUES ('$codigoBarras', '$nombreFoto');");
-
-	            		$db2->close();
-	       	     	}
-	        	}
+		    	if (((strpos($img_type, "gif") || strpos($img_type, "jpeg") ||
+		 			strpos($img_type, "jpg")) || strpos($img_type, "png")))
+		    	{
+					if (move_uploaded_file($tmp_name, $directorio_destino . '/' . $nombreFoto))
+					{
+						// Hemos insertado la foto
+					}
+					// No hemos insertado la foto
+		        }
 	    	}
 
-	    	/* No hemos contemplado que algo que tiene que ver con la imagen haya fallado (a excepción del numero de bytes del documento) o bien no se ha insertado ninguna */
+	    }
+
+	    function eliminarFoto(){
+	    	global $codigoBarras;
+	    	global $directorio_destino;
+	    	$cb = $_POST["codigoBarras"];
+
+	    	$db4 = new MiBD();
+	    	$nombreA = $db4->query("SELECT FotoP FROM Recordar WHERE CodigoDeBarras=$cb") or die('Consulta fallida: ' . mysqli_error($db4));
+
+	        		
+			while($nombreI = $nombreA->fetchArray()){
+				unlink($directorio_destino . '/' . $nombreI[0]);
+	        }
+	        $db4->close();
+	    }
+
+	    // En este caso, no hemos insertado anteriormente este codigo de barras
+	    if($contador == 0){
+
+	    	guardarFoto();
+
+			$db2 = new MiBD();
+			$db2->exec("INSERT INTO Recordar (CodigoDeBarras, FotoP) VALUES ('$codigoBarras', '$nombreFoto');");
+			$db2->close();
+
+	    } else{
+
+			eliminarFoto();
+			guardarFoto();
+
+			// Actualizo el campo en la BBDD
+	    	$db2 = new MiBD();
+			$db2->exec("UPDATE Recordar SET FotoP='$nombreFoto' WHERE CodigoDeBarras=$codigoBarras");
+
+	        $db2->close();
+	    }
+
+		$db3->close();
+
+	    /* No hemos contemplado que algo que tiene que ver con la imagen haya fallado (a excepción del numero de bytes del documento) o bien no se ha insertado ninguna */
 	    	
-	    	$db = new MiBD();
+	    $db = new MiBD();
 
-			$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
+		$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
 
+		$cantidad = $db->query("SELECT SUM(CantidadInicial) FROM Almacen WHERE CodigoDeBarras = $codigoBarras");
+		$cantidad2 = $cantidad -> fetchArray();
+		$totalCant = $cantidad2[0] + $cantidadI;
 
-			$cantidad = $db->query("SELECT SUM(CantidadInicial) FROM Almacen WHERE CodigoDeBarras = $codigoBarras");
-			$cantidad2 = $cantidad -> fetchArray();
-			$totalCant = $cantidad2[0] + $cantidadI;
-
-			if($cantidad2[0] < 0){
-				echo "<script type='text/javascript'>alert('No hay suficientes existencias en almacen');</script>";
-			}
-			else{
-				$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, Cantidad, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras', '$totalCant' ,'$cantidadI', '$marca', '$proveedor');");
-			}
-
-			$db->close();
-			unset($_POST['submit']);
-			$url = 'insertar.php';
-			header('Location: '.$url);
-
+		if($cantidad2[0] < 0){
+			echo "<script type='text/javascript'>alert('No hay suficientes existencias en almacen');</script>";
 		}
+		else{
+			$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, Cantidad, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras', '$totalCant' ,'$cantidadI', '$marca', '$proveedor');");
+		}
+
+		$db->close();
+		unset($_POST['submit']);
+		$url = 'insertar.php';
+		header('Location: '.$url);
+
 	}
 
 ?>
