@@ -49,20 +49,37 @@
 
 	function validaciones(){
 
-		var valor2 = document.getElementById("cantI").value;
+		var valor1 = document.getElementById("cantI").value;
 
-		if (valor2 != ""){
+		if (valor1 != ""){
 
 			var valoresAceptados = /^[0-9]+$/;
-			if (valor2.match(valoresAceptados)){
+			if (valor1.match(valoresAceptados)){
 				//alert ("Es numérico");
-				return true;
+				//return true;
 			} else {
          		alert ("La cantidad debe ser numérica");
          		return false;
     		}
 
 		}
+
+		// Codigo de barras
+		/* Queda mirar la longitud que es fija entre 8 y 13 dígitos */
+		var valor2 = document.getElementById("codigoBarras").value;	
+
+		var reGuion = /-/g;
+		var rePunto = /\./g;
+
+		if (!valor2.match(valoresAceptados)){
+			valor2 = valor2.replace(reGuion, '');
+			valor2 = valor2.replace(rePunto, '');
+			if (!valor2.match(valoresAceptados)){
+				alert ("Codigo de barras incorrecto");
+				return false;
+			}
+		}
+		return true;
 	}
 
 </script>
@@ -81,6 +98,9 @@
 
 		$tipoProd = $_POST["fname"];
 		$codigoBarras = $_POST["codigoBarras"];
+		$codigoBarras = str_replace('-', '', $codigoBarras);
+		$codigoBarras = str_replace('.', '', $codigoBarras);
+
 		$cantidadI = $_POST["cantI"];
 		$marca = $_POST["marca"];
 		$proveedor = $_POST["proveedor"];
@@ -130,7 +150,7 @@
 	    	$cb = $_POST["codigoBarras"];
 
 	    	$db4 = new MiBD();
-	    	$nombreA = $db4->query("SELECT FotoP FROM Recordar WHERE CodigoDeBarras=$cb") or die('Consulta fallida: ' . mysqli_error($db4));
+	    	$nombreA = $db4->query("SELECT FotoP FROM Recordar WHERE CodigoDeBarras=$cb");
 
 	        		
 			while($nombreI = $nombreA->fetchArray()){
@@ -150,12 +170,16 @@
 
 	    } else{
 
-			eliminarFoto();
-			guardarFoto();
+	    	if($nombreFoto != $codigoBarras){
+				eliminarFoto();
+				guardarFoto();
 
-			// Actualizo el campo en la BBDD
-	    	$db2 = new MiBD();
-			$db2->exec("UPDATE Recordar SET FotoP='$nombreFoto' WHERE CodigoDeBarras=$codigoBarras");
+				// Actualizo el campo en la BBDD
+		    	$db2 = new MiBD();
+				$db2->exec("UPDATE Recordar SET FotoP='$nombreFoto' WHERE CodigoDeBarras=$codigoBarras");
+			}
+			/* Si no inserta foto, el campo FotoP se rellena con el codigo de barras, cuand
+			queramos mostrar la foto comparamos y si es igual no mostramos nada. */
 
 	        $db2->close();
 	    }
