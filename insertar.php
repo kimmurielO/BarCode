@@ -11,7 +11,8 @@
 
 <nav> 
     <ul>
-        <li><a href="./mostrarDP.php"> Mostrar </a></li>
+    	<li><a href="./almacen.php"> Almacen </a></li>
+        <li><a href="./inventario.php"> Inventario </a></li>
         <li><a href="./insertar.php"> Agregar </a></li>
         <li><a href="./eliminar.php"> Eliminar </a></li>
     </ul>
