@@ -11,9 +11,9 @@
 
 <nav> 
     <ul>
-        <li><a href="./eliminar.php"> Eliminar </a></li>
-        <li><a href="./insertar.php"> Agregar </a></li>
         <li><a href="./mostrarDP.php"> Mostrar </a></li>
+        <li><a href="./insertar.php"> Agregar </a></li>
+        <li><a href="./eliminar.php"> Eliminar </a></li>
     </ul>
 </nav>
 
@@ -26,14 +26,8 @@
 <form method="POST" action="" onsubmit="return validaciones();">
 	<label for="codigoBarras"> Escanea el codigo de barras: </label>
 	<input type="text" name="codigoBarras" id="codigoBarras" onfocus="myFunction(this)" required><br><br>
-	<label for="fname"> Tipo de producto:</label>
-	<input type="text" name="fname" required><br><br>
 	<label for="cantE>"> Cantidad:</label>
 	<input type="text" name="cantE" id="cantE" required><br><br>
-	<label for="marca"> Marca:</label>
-	<input type="text" name="marca" id="marca" required><br><br>
-	<label for="proveedor"> Proveedor:</label>
-	<input type="text" name="proveedor" id="proveedor" required><br><br>
  	<input type="submit" name="submit" value="Eliminar">
 </form>
 
@@ -74,18 +68,15 @@ class MiBD extends SQLite3
 
 if(isset($_POST["submit"])){
 
-		$tipoProd = $_POST["fname"];
 		$codigoBarras = $_POST["codigoBarras"];
 		$cantidadE = - $_POST["cantE"];
-		$marca = $_POST["marca"];
-		$proveedor = $_POST["proveedor"];
 
 		$db = new MiBD();
 
 		$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
 
 
-		$cantidad = $db->query("SELECT SUM(CantidadInicial) FROM Almacen WHERE CodigoDeBarras = $codigoBarras");
+		$cantidad = $db->query("SELECT CantidadActual FROM Recordar WHERE CodigoDeBarras = $codigoBarras");
 		$cantidad2 = $cantidad -> fetchArray();
 		$totalCant = $cantidad2[0] + $cantidadE;
 
@@ -93,7 +84,8 @@ if(isset($_POST["submit"])){
 			alert("No hay suficientes existencias en almacen");
 		}
 		else{
-			$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, Cantidad, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras', '$totalCant' ,'$cantidadE', '$marca', '$proveedor');");
+			$db->exec("INSERT INTO Almacen (CodigoDeBarras, CantidadInicial) VALUES ('$codigoBarras','$cantidadE');");
+			$db->exec("UPDATE Recordar SET CantidadActual=$totalCant WHERE CodigoDeBarras=$codigoBarras;");
 		}
 
 

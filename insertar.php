@@ -11,15 +11,13 @@
 
 <nav> 
     <ul>
-        <li><a href="./eliminar.php"> Eliminar </a></li>
-        <li><a href="./insertar.php"> Agregar </a></li>
         <li><a href="./mostrarDP.php"> Mostrar </a></li>
+        <li><a href="./insertar.php"> Agregar </a></li>
+        <li><a href="./eliminar.php"> Eliminar </a></li>
     </ul>
 </nav>
 
 <section>
-
-
 
 <h2>Agregar al inventario</h2>
 
@@ -64,10 +62,16 @@
 
 		}
 
-		// Codigo de barras
-		/* Queda mirar la longitud que es fija entre 8 y 13 dígitos */
-		var valor2 = document.getElementById("codigoBarras").value;	
+		// Verificación del codigo de barras
+		var valor2 = document.getElementById("codigoBarras").value;
 
+		// Longitud entre 8 y 13 dígitos
+		if(valor2.length > 13 || valor2.length < 8){
+			alert ("Codigo de barras incorrecto");
+			return false;
+		}
+
+		// Que los valores del codigo de barras sean numericos
 		var reGuion = /-/g;
 		var rePunto = /\./g;
 
@@ -176,32 +180,36 @@
 
 				// Actualizo el campo en la BBDD
 		    	$db2 = new MiBD();
-				$db2->exec("UPDATE Recordar SET FotoP='$nombreFoto' WHERE CodigoDeBarras=$codigoBarras");
+				$db2->query("UPDATE Recordar SET FotoP='$nombreFoto' WHERE CodigoDeBarras=$codigoBarras");
+				$db2->close();
 			}
 			/* Si no inserta foto, el campo FotoP se rellena con el codigo de barras, cuand
 			queramos mostrar la foto comparamos y si es igual no mostramos nada. */
 
-	        $db2->close();
 	    }
 
 		$db3->close();
 
 	    /* No hemos contemplado que algo que tiene que ver con la imagen haya fallado (a excepción del numero de bytes del documento) o bien no se ha insertado ninguna */
 	    	
-	    $db = new MiBD();
+	    $db5 = new MiBD();
+		
+	    if ($contador == 0){
+	    	$db5->exec("UPDATE Recordar SET CantidadActual=$cantidadI WHERE CodigoDeBarras=$codigoBarras;");
+	    }
+	    else {
+			$cantidadPas = $db5->query("SELECT CantidadActual FROM Recordar WHERE CodigoDeBarras=$codigoBarras;");
+			$cantidadPas2 = $cantidadPas -> fetchArray();
+			$totalCant = $cantidadPas2[0] + $cantidadI;
 
-		$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
+			$db5->exec("UPDATE Recordar SET CantidadActual=$totalCant WHERE CodigoDeBarras=$codigoBarras;");
+	    }
 
-		$cantidad = $db->query("SELECT SUM(CantidadInicial) FROM Almacen WHERE CodigoDeBarras = $codigoBarras");
-		$cantidad2 = $cantidad -> fetchArray();
-		$totalCant = $cantidad2[0] + $cantidadI;
+		$db5->close();
 
-		if($cantidad2[0] < 0){
-			echo "<script type='text/javascript'>alert('No hay suficientes existencias en almacen');</script>";
-		}
-		else{
-			$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, Cantidad, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras', '$totalCant' ,'$cantidadI', '$marca', '$proveedor');");
-		}
+		$db = new MiBD();
+
+		$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras' ,'$cantidadI', '$marca', '$proveedor');");
 
 		$db->close();
 		unset($_POST['submit']);

@@ -11,9 +11,9 @@
 
 <nav> 
     <ul>
-        <li><a href="./eliminar.php"> Eliminar </a></li>
-        <li><a href="./insertar.php"> Agregar </a></li>
         <li><a href="./mostrarDP.php"> Mostrar </a></li>
+        <li><a href="./insertar.php"> Agregar </a></li>
+        <li><a href="./eliminar.php"> Eliminar </a></li>
     </ul>
 </nav>
 
