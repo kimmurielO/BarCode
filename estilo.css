@@ -72,7 +72,23 @@ textarea {
     width:260px;
 }
 
+table{
+    position: relative;
+    margin: auto;
+    text-align: center;
+    padding: 10px; 
+    
+}
+
 
 h2{
     text-align: center;
+}
+
+.CantRojo{
+    background-color: hsl(0, 60%, 60%);
+}
+
+.CantVerde{
+    background-color: hsl(120, 60%, 60%);
 }
