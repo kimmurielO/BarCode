@@ -96,3 +96,7 @@ h2{
 .CantVerde{
     background-color: hsl(120, 60%, 60%);
 }
+
+.obligatorio{
+    text-align: center;
+}

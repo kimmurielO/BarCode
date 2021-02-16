@@ -37,6 +37,7 @@
     }
 
     $bd = new MiBD();
+    $bd2 = new MiBD();
 
     $resultado = $bd->query("SELECT * FROM Almacen limit $inicio,25");
 
@@ -47,18 +48,24 @@
     echo "<th> Cantidad inicial </th>";
     echo "<th> Marca </th>";
     echo "<th> Proveedor </th>";
+    echo "<th> Fecha </th>";
     echo "</tr>";
     echo "<br>";
 
     $impresos=0;
     while ($row = $resultado->fetchArray()) {
         $impresos++;
-        $CantidadActual = $bd->query("SELECT CantidadActual FROM Recordar WHERE CodigoDeBarras='$row[1]'");
+        /*$CantidadActual = $bd->query("SELECT CantidadActual FROM Recordar WHERE CodigoDeBarras='$row[0]'");
         $CantidadActual2 = $CantidadActual-> fetchArray();
-        $CantidadAviso = $bd->query("SELECT RecordarCant FROM Recordar WHERE CodigoDeBarras='$row[1]'");
-        $CantidadAviso2 =  $CantidadAviso -> fetchArray();
+        $CantidadAviso = $bd->query("SELECT RecordarCant FROM Recordar WHERE CodigoDeBarras='$row[0]'");
+        $CantidadAviso2 =  $CantidadAviso -> fetchArray();*/
 
-        if ($CantidadActual2[0] < $CantidadAviso2[0]){
+        $MarcaP = $bd->query("SELECT Marca FROM Recordar WHERE CodigoDeBarras='$row[0]'");
+        $MarcaP2 = $MarcaP-> fetchArray();
+        $TipoP = $bd->query("SELECT TipoDeProducto FROM Recordar WHERE CodigoDeBarras='$row[0]'");
+        $TipoP2 = $TipoP-> fetchArray();
+
+        if ($row[1] < 0){
             echo "<tr class='CantRojo'>";
         }
         else{
@@ -66,11 +73,12 @@
         }
 
         //echo "<tr>";
+        echo "<td> $MarcaP2[0] </td>";
         echo "<td> $row[0] </td>";
         echo "<td> $row[1] </td>";
+        echo "<td> $TipoP2[0] </td>";
         echo "<td> $row[2] </td>";
         echo "<td> $row[3] </td>";
-        echo "<td> $row[4] </td>";
         echo "</tr>";
     }
     echo "</table>";

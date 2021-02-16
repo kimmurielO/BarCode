@@ -45,7 +45,7 @@
 
 			var valoresAceptados = /^[0-9]+$/;
 			if (valor2.match(valoresAceptados)){
-				alert ("Es numérico");
+				//alert ("Es numérico");
 				return true;
 			} else {
          		alert ("La cantidad debe ser numérica");

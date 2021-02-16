@@ -40,10 +40,6 @@ section{
     padding:20px;
 }
 
-form input[type="file"]{
-  color: transparent;
-}
-
 textarea {
     width:260px;
 }

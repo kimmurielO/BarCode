@@ -24,25 +24,26 @@
 
 <form enctype="multipart/form-data" method="POST" action="" onsubmit="return validaciones();">
 	<label for="codigoBarras"> Escanea el codigo de barras: </label>
-	<input type="text" name="codigoBarras" id="codigoBarras" required><br><br>
+	<input type="text" name="codigoBarras" id="codigoBarras" required> * <br><br>
 	<label for="fname">Tipo de producto:</label>
-	<input type="text" name="fname" required><br><br>
+	<input type="text" name="fname"> <br><br>
 	<label for="cantI>"> Cantidad:</label>
-	<input type="text" name="cantI" id="cantI" required><br><br>
+	<input type="text" name="cantI" id="cantI" required> * <br><br>
 	<label for="marca>"> Marca:</label>
-	<input type="text" name="marca" id="marca" required><br><br>
+	<input type="text" name="marca" id="marca"> <br><br>
 	<label for="proveedor"> Proveedor:</label>
-	<input type="text" name="proveedor" id="proveedor" required><br><br>
+	<input type="text" name="proveedor" id="proveedor" required> * <br><br>
 	<label for="fotoP"> Foto:</label>
-	<input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
+	<input type="hidden" name="MAX_FILE_SIZE" value="800000" />
 	<input type="file" name="fotoP" id="fotoP"><br><br>
 	<label for="descrip"> Descripción del producto:</label>
-	<textarea name="descrip" placeholder="Escribe una breve descripción"></textarea><br><br>
+	<textarea name="descrip" id="descrip" placeholder="Breve descripcion del producto"></textarea><br><br>
  	<input type="submit" name="submit" value="Agregar">
 </form>
 
-
 </section>
+
+<p class="obligatorio">Los campos marcados son * campos obligatorios</p>
 
 <script>
 
@@ -109,7 +110,8 @@
 		$cantidadI = $_POST["cantI"];
 		$marca = $_POST["marca"];
 		$proveedor = $_POST["proveedor"];
-		
+		$descripcionP = $_POST["descrip"];
+
 		$img_file = $_FILES['fotoP']['name'];
         $img_type = $_FILES['fotoP']['type'];
 		$tmp_name = $_FILES['fotoP']['tmp_name'];
@@ -170,7 +172,7 @@
 	    	guardarFoto();
 
 			$db2 = new MiBD();
-			$db2->exec("INSERT INTO Recordar (CodigoDeBarras, FotoP) VALUES ('$codigoBarras', '$nombreFoto');");
+			$db2->exec("INSERT INTO Recordar (CodigoDeBarras, Descripcion, FotoP, Marca, TipoDeProducto) VALUES ('$codigoBarras','$descripcionP','$nombreFoto', '$marca', '$tipoProd');");
 			$db2->close();
 
 	    } else{
@@ -186,6 +188,27 @@
 			}
 			/* Si no inserta foto, el campo FotoP se rellena con el codigo de barras, cuand
 			queramos mostrar la foto comparamos y si es igual no mostramos nada. */
+
+			if($marca != NULL || $marca != ""){
+				// Actualizo el campo en la BBDD
+		    	$db2 = new MiBD();
+				$db2->query("UPDATE Recordar SET Marca='$marca' WHERE CodigoDeBarras=$codigoBarras");
+				$db2->close();
+			}
+
+			if($descripcionP != NULL || $descripcionP != ""){
+				// Actualizo el campo en la BBDD
+		    	$db2 = new MiBD();
+				$db2->query("UPDATE Recordar SET Descripcion='$descripcionP' WHERE CodigoDeBarras=$codigoBarras");
+				$db2->close();
+			}
+
+			if($tipoProd != NULL || $descrip != ""){
+				// Actualizo el campo en la BBDD
+		    	$db2 = new MiBD();
+				$db2->query("UPDATE Recordar SET TipoDeProducto='$tipoProd' WHERE CodigoDeBarras=$codigoBarras");
+				$db2->close();
+			}
 
 	    }
 
@@ -210,7 +233,8 @@
 
 		$db = new MiBD();
 
-		$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras' ,'$cantidadI', '$marca', '$proveedor');");
+		//$db->exec("INSERT INTO Almacen (TipoDeProducto, CodigoDeBarras, CantidadInicial, Marca, Proveedor) VALUES ('$tipoProd', '$codigoBarras' ,'$cantidadI', '$marca', '$proveedor');");
+		$db->exec("INSERT INTO Almacen (CodigoDeBarras, CantidadInicial, Proveedor) VALUES ('$codigoBarras' ,'$cantidadI', '$proveedor');");
 
 		$db->close();
 		unset($_POST['submit']);

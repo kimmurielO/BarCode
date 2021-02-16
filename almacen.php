@@ -81,11 +81,25 @@
         echo "</form> </td>";
 
         echo "<td> $row[3] </td>";
+
         echo "<td> $row[4] <br><br>";
         echo "<form method='POST' action='modificarRecordatorio.php'>";
         echo "<label for='recorda'>Nuevo número:</label> <input type='text' name='recorda' required><br><br>";
         echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
         echo "</form> </td>";
+
+        echo "<td> $row[5] <br><br>";
+        echo "<form method='POST' action='modificarMarca.php'>";
+        echo "<label for='marca'>Nuevo número:</label> <input type='text' name='marca' required><br><br>";
+        echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
+        echo "</form> </td>";
+
+        echo "<td> $row[6] <br><br>";
+        echo "<form method='POST' action='modificarTipo.php'>";
+        echo "<label for='tipoP'>Nuevo número:</label> <input type='text' name='tipoP' required><br><br>";
+        echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
+        echo "</form> </td>";
+
         echo "</tr>";
     }
     echo "</table>";
