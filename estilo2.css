@@ -40,30 +40,6 @@ section{
     padding:20px;
 }
 
-form{
-    width:800px;
-    padding:16px;
-    border-radius:10px;
-    margin:auto;
-    background-color:#ccc;
-}
-
-form label{
-    width:400px;
-    font-weight:bold;
-    display:inline-block;
-}
-
-form input[type="text"]{
-    width:240px;
-    padding:3px 10px;
-    border:1px solid #f6f6f6;
-    border-radius:3px;
-    background-color:#f6f6f6;
-    margin:8px 0;
-    display:inline-block;
-}
-
 /*form input[type="file"]{
   color: transparent;
 }*/
@@ -82,7 +58,7 @@ table{
 
 th, td {
   padding: 5px;
-  width: 240px;
+  width: 200px;
 }
 
 h2{

@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>Tabla almacen</title>
-    <link rel="stylesheet" href="./estilo.css">
+    <link rel="stylesheet" href="./estilo2.css">
 </head>
 <body>
 
@@ -24,18 +24,6 @@
         <li><a href="./eliminar.php"> Eliminar </a></li>
     </ul>
 </nav>
-
-<script>
-    function modificar(codigoBarrasS){
-        var formData = new FormData();
-
-        formData.append("codigoBarrasS", codigoBarrasS);
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "almacen.php");
-        xhr.send(formData);
-        //window.location="modificar.php";
-    }
-</script>
 
 <?php
 
@@ -79,11 +67,18 @@
         //echo "<tr>";
         $srcI="./Imagenes/$row[2]";
         echo "<td> $row[0] </td>";
-        echo "<td> $row[1] </td>";
+
+        echo "<td> $row[1] </br></br>";
+        echo "<form method='POST' action='modificar.php'>";
+        echo "<label for='codigoB'></label> <input type='text' name='codigoB' value='$row[0]' hidden>";
+        echo "<label for='descrip'>Nueva descripción:</label> <input type='text' name='descrip' required><br><br>";
+        echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
+        echo "</form> </td>";
+
         echo "<td> <img src='$srcI' alt='Inserta foto' width='200' height='200'> </td>";
+
         echo "<td> $row[3] </td>";
         echo "<td> $row[4] </td>";
-        echo "<td> <button type='button' onClick='modificar($row[0])'> Modificar</button> </td>";
         echo "</tr>";
     }
     echo "</table>";
@@ -103,6 +98,7 @@
     }
     else
         echo "Siguientes";
+
 ?>
 
 </body>
