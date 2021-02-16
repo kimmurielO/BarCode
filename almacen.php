@@ -69,16 +69,23 @@
         echo "<td> $row[0] </td>";
 
         echo "<td> $row[1] </br></br>";
-        echo "<form method='POST' action='modificar.php'>";
-        echo "<label for='codigoB'></label> <input type='text' name='codigoB' value='$row[0]' hidden>";
+        echo "<form method='POST' action='modificarDescrip.php'>";
         echo "<label for='descrip'>Nueva descripción:</label> <input type='text' name='descrip' required><br><br>";
         echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
         echo "</form> </td>";
 
-        echo "<td> <img src='$srcI' alt='Inserta foto' width='200' height='200'> </td>";
+        echo "<td> <img src='$srcI' alt='Inserta foto' width='200' height='200'><br><br>";
+        echo "<form enctype='multipart/form-data' method='POST' action='modificarFoto.php'>";
+        echo "<label for='fotoP'> Nueva foto:</label><input type='hidden' name='MAX_FILE_SIZE' value='1000000' required/><input type='file' name='fotoP' id='fotoP'><br><br>";
+        echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
+        echo "</form> </td>";
 
         echo "<td> $row[3] </td>";
-        echo "<td> $row[4] </td>";
+        echo "<td> $row[4] <br><br>";
+        echo "<form method='POST' action='modificarRecordatorio.php'>";
+        echo "<label for='recorda'>Nuevo número:</label> <input type='text' name='recorda' required><br><br>";
+        echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
+        echo "</form> </td>";
         echo "</tr>";
     }
     echo "</table>";
