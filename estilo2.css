@@ -24,7 +24,7 @@ nav ul{
 nav ul li{
     display:inline-block;
     width:24%;
-    line-height:50px;
+    line-height:60px;
     list-style: none;
 }
  
@@ -38,10 +38,6 @@ nav ul li a{
 section{
     position:relative;
     padding:20px;
-}
-
-textarea {
-    width:260px;
 }
 
 table{
@@ -67,4 +63,16 @@ h2{
 
 .CantVerde{
     background-color: hsl(120, 60%, 60%);
+}
+
+.CantNaranja{
+    background-color: hsl(20, 60%, 60%);
+}
+
+input[type='text']{
+    width:165px;
+}
+
+form input[type='file']{
+    width:165px;
 }

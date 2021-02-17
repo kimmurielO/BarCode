@@ -42,10 +42,12 @@
     echo "<table>";
     echo "<tr>";
     echo "<th> Código de barras</th>";
+    echo "<th style='width:100px'> Cantidad actual </th>";
     echo "<th> Descripción </th>";
     echo "<th> Foto </th>";
-    echo "<th> Cantidad actual </th>";
     echo "<th> Recordatorio </th>";
+    echo "<th> Marca</th>";
+    echo "<th> Tipo de producto  </th>";
     echo "</tr>";
     echo "<br>";
 
@@ -60,13 +62,17 @@
         if ($CantidadActual2[0] < $CantidadAviso2[0]){
             echo "<tr class='CantRojo'>";
         }
+        elseif(($CantidadActual2[0] < 10+$CantidadAviso2[0]) && ($CantidadActual2[0] > $CantidadAviso2[0])){
+            echo "<tr class='CantNaranja'>";
+        }
         else{
             echo "<tr class='CantVerde'>";
         }
 
-        //echo "<tr>";
         $srcI="./Imagenes/$row[2]";
+
         echo "<td> $row[0] </td>";
+        echo "<td style='width:100px'> $row[3] </td>";
 
         echo "<td> $row[1] </br></br>";
         echo "<form method='POST' action='modificarDescrip.php'>";
@@ -74,29 +80,28 @@
         echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
         echo "</form> </td>";
 
-        echo "<td> <img src='$srcI' alt='Inserta foto' width='200' height='200'><br><br>";
+        /*echo "<td> <img src='$srcI' alt='Inserta foto' width='150' height='150'><br><br>";*/
+        echo "<td> <img  onclick='javascript:this.width=450;this.height=450' ondblclick='javascript:this.width=150;this.height=150' src='$srcI' alt='Inserta foto' width='150' height='150'><br><br>";
         echo "<form enctype='multipart/form-data' method='POST' action='modificarFoto.php'>";
         echo "<label for='fotoP'> Nueva foto:</label><input type='hidden' name='MAX_FILE_SIZE' value='1000000' required/><input type='file' name='fotoP' id='fotoP'><br><br>";
         echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
         echo "</form> </td>";
 
-        echo "<td> $row[3] </td>";
-
         echo "<td> $row[4] <br><br>";
         echo "<form method='POST' action='modificarRecordatorio.php'>";
-        echo "<label for='recorda'>Nuevo número:</label> <input type='text' name='recorda' required><br><br>";
+        echo "<label for='recorda'>Nuevo nº:</label> <input type='text' name='recorda' required><br><br>";
         echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
         echo "</form> </td>";
 
         echo "<td> $row[5] <br><br>";
         echo "<form method='POST' action='modificarMarca.php'>";
-        echo "<label for='marca'>Nuevo número:</label> <input type='text' name='marca' required><br><br>";
+        echo "<label for='marca'>Nueva marca:</label> <input type='text' name='marca' required><br><br>";
         echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
         echo "</form> </td>";
 
         echo "<td> $row[6] <br><br>";
         echo "<form method='POST' action='modificarTipo.php'>";
-        echo "<label for='tipoP'>Nuevo número:</label> <input type='text' name='tipoP' required><br><br>";
+        echo "<label for='tipoP'>Nuevo tipo:</label> <input type='text' name='tipoP' required><br><br>";
         echo "<button type='submit' name='submit' value='$row[0]'> Modificar</button>";
         echo "</form> </td>";
 
