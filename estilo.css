@@ -17,13 +17,13 @@ nav{
 nav ul{
     position:relative;
     margin:auto;
-    width:50%;
+    width:70%;
     text-align: center;
 }
 
 nav ul li{
     display:inline-block;
-    width:24%;
+    width:18%;
     line-height:50px;
     list-style: none;
 }
@@ -64,10 +64,6 @@ form input[type="text"]{
     display:inline-block;
 }
 
-/*form input[type="file"]{
-  color: transparent;
-}*/
-
 textarea {
     width:260px;
 }
@@ -99,4 +95,8 @@ h2{
 
 .obligatorio{
     text-align: center;
+}
+
+.pagin{
+    padding: 30px;
 }

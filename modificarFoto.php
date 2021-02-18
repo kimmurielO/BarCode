@@ -25,11 +25,13 @@
         $tmp_name = $_FILES['fotoP']['tmp_name'];
         $directorio_destino = "./Imagenes";
         $nombreFoto = $codigoBarras . $img_file;
+        $fallo = 0;
 
         function guardarFoto(){
+            global $fallo;
 
         if( $_FILES['fotoP']['size'] > 800000 ) {
-                echo "<script type='text/javascript'>alert('No se pueden subir archivos con pesos mayores a 800kB');</script>";
+                $fallo = 1;
             } else {
                 global $img_type;
                 global $tmp_name;
@@ -43,6 +45,9 @@
                     {
                         // Hemos insertado la foto
                     }
+                    else{
+                        $fallo = 1;
+                    }
                     // No hemos insertado la foto
                 }
             }
@@ -55,7 +60,7 @@
             $cb = $_POST["submit"];
 
             $db4 = new MiBD();
-            $nombreA = $db4->query("SELECT FotoP FROM Recordar WHERE CodigoDeBarras=$cb");
+            $nombreA = $db4->query("SELECT FotoP FROM Recordar WHERE CodigoDeBarras=$cb") or die("Problemas en el select:".mysqli_error($db4));
 
                     
             while($nombreI = $nombreA->fetchArray()){
@@ -64,12 +69,13 @@
             $db4->close();
         }
 
-        eliminarFoto();
+        $db = new MiBD();
         guardarFoto();
 
-		$db = new MiBD();
-
-        $db->exec("UPDATE Recordar SET FotoP='$nombreFoto' WHERE CodigoDeBarras=$codigoBarras");
+        if ($fallo == 0){
+            eliminarFoto();
+            $db->exec("UPDATE Recordar SET FotoP='$nombreFoto' WHERE CodigoDeBarras=$codigoBarras") or die("Problemas en el update:".mysqli_error($db));
+        }
 
 		$db->close();
 		unset($_POST['submit']);

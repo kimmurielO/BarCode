@@ -28,7 +28,7 @@
 
 		$db = new MiBD();
 
-		$db->exec("UPDATE Recordar SET Descripcion='$descrip' WHERE CodigoDeBarras=$codigoBarras");
+		$db->exec("UPDATE Recordar SET Descripcion='$descrip' WHERE CodigoDeBarras=$codigoBarras") or die("Problemas en el update:".mysqli_error($db));
 
 		$db->close();
 		unset($_POST['submit']);

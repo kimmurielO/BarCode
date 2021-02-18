@@ -3,7 +3,7 @@
 	
 </head>
 <body>
-	<h1>Modificar descripcion</h1>
+	<h1>Modificar recordatorio</h1>
 </body>
 </html>
 
@@ -19,12 +19,12 @@
 
 	if(isset($_POST["submit"])){
 
-		$tipoPro = $_POST["tipoP"];
+		$recordatorioN = $_POST["recordaMin"];
 		$codigoBarras = $_POST["submit"];
 
 		$db = new MiBD();
 
-		$db->exec("UPDATE Recordar SET TipoDeProducto='$tipoPro' WHERE CodigoDeBarras=$codigoBarras") or die("Problemas en el update:".mysqli_error($db));
+		$db->exec("UPDATE Recordar SET Minimo='$recordatorioN' WHERE CodigoDeBarras=$codigoBarras") or die("Problemas en el update:".mysqli_error($db));
 
 		$db->close();
 		unset($_POST['submit']);

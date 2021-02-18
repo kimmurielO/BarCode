@@ -15,6 +15,7 @@
         <li><a href="./inventario.php"> Inventario </a></li>
         <li><a href="./insertar.php"> Agregar </a></li>
         <li><a href="./eliminar.php"> Eliminar </a></li>
+        <li><a href="./editar.php"> Editar </a></li>
     </ul>
 </nav>
 
@@ -74,29 +75,29 @@ if(isset($_POST["submit"])){
 
 		$db = new MiBD();
 
-		$db->exec("CREATE TABLE IF NOT EXISTS `Almacen` (`Nombre` varchar(35) NOT NULL);");
-
-
-		$cantidad = $db->query("SELECT CantidadActual FROM Recordar WHERE CodigoDeBarras = $codigoBarras");
+		$cantidad = $db->query("SELECT CantidadActual FROM Almacen WHERE CodigoDeBarras = $codigoBarras") or die("Problemas en el select:".mysqli_error($db));
 		$cantidad2 = $cantidad -> fetchArray();
 		$totalCant = $cantidad2[0] + $cantidadE;
 
-		if($cantidad2[0] < 0){
-			alert("No hay suficientes existencias en almacen");
+		if($totalCant< 0){
+			?>
+				<script>alert('No hay existencias en el almacen');</script>
+			<?php
 		}
 		else{
-			$db->exec("INSERT INTO Almacen (CodigoDeBarras, CantidadInicial) VALUES ('$codigoBarras','$cantidadE');");
-			$db->exec("UPDATE Recordar SET CantidadActual=$totalCant WHERE CodigoDeBarras=$codigoBarras;");
+			$db->exec("INSERT INTO Inventario (CodigoDeBarras, CantidadInicial) VALUES ('$codigoBarras','$cantidadE');") or die("Problemas en el insert:".mysqli_error($db));
+			$db->exec("UPDATE Almacen SET CantidadActual=$totalCant WHERE CodigoDeBarras=$codigoBarras;") or die("Problemas en el update:".mysqli_error($db));
 		}
 
 
 		$db->close();
 		unset($_POST['submit']);
 		$url = 'eliminar.php';
-		header('Location: '.$url);
+		//header('Location: '.$url);
 }
 
 ?>
+
 
 </body>
 </html>
