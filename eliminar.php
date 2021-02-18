@@ -21,20 +21,19 @@
 
 <section>
 
+	<h2>Eliminar del inventario</h2>
 
-
-<h2>Eliminar del inventario</h2>
-
-<form method="POST" action="" onsubmit="return validaciones();">
-	<label for="codigoBarras"> Escanea el codigo de barras: </label>
-	<input type="text" name="codigoBarras" id="codigoBarras" onfocus="myFunction(this)" required><br><br>
-	<label for="cantE>"> Cantidad:</label>
-	<input type="text" name="cantE" id="cantE" required><br><br>
- 	<input type="submit" name="submit" value="Eliminar">
-</form>
-
+	<form method="POST" action="" onsubmit="return validaciones();">
+		<label for="codigoBarras"> Escanea el codigo de barras: </label>
+		<input type="text" name="codigoBarras" id="codigoBarras" onfocus="myFunction(this)" required> * <br><br>
+		<label for="cantE>"> Cantidad:</label>
+		<input type="text" name="cantE" id="cantE" required> * <br><br>
+	 	<input type="submit" name="submit" value="Eliminar">
+	</form>
 
 </section>
+
+<p class="obligatorio">Los campos marcados son * campos obligatorios</p>
 
 <script>
 
