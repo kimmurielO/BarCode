@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<header><h1 style={position:relative}>Inventario</h1></header>
+<header><h1 style={position:relative}>Eliminar</h1></header>
 
 <nav> 
     <ul>

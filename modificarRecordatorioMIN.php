@@ -3,7 +3,7 @@
 	
 </head>
 <body>
-	<h1>Modificar recordatorio</h1>
+	<h1>Modificar recordatorio mínimo</h1>
 </body>
 </html>
 

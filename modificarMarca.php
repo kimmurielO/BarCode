@@ -3,7 +3,7 @@
 	
 </head>
 <body>
-	<h1>Modificar descripcion</h1>
+	<h1>Modificar marca</h1>
 </body>
 </html>
 

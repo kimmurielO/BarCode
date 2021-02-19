@@ -9,12 +9,12 @@
 <meta charset="UTF-8">
 <html>
 <head>
-    <title>Tabla almacen</title>
+    <title>Editar</title>
     <link rel="stylesheet" href="./estilo2.css">
 </head>
 <body>
 
-<header><h1 style={position:relative}>Almacen</h1></header>
+<header><h1 style={position:relative}>Editar</h1></header>
 
 <nav> 
     <ul>

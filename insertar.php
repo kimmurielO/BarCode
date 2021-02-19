@@ -2,12 +2,12 @@
 <meta charset="UTF-8">
 <html>
 <head>
-	<title>Insertar producto inventario</title>
+	<title>Agregar producto inventario</title>
 	<link rel="stylesheet" href="./estilo.css">
 </head>
 <body>
 
-<header><h1 style={position:relative}>Inventario</h1></header>
+<header><h1 style={position:relative}>Agregar</h1></header>
 
 <nav> 
     <ul>
