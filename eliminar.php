@@ -7,7 +7,9 @@
 </head>
 <body>
 
-<header><h1 style={position:relative}>Eliminar</h1></header>
+<header>
+		<h1 style={position:relative}>Eliminar</h1>
+</header>
 
 <nav> 
     <ul>
@@ -39,6 +41,7 @@
 
 	function validaciones(){
 
+		var valor1 = document.getElementById("codigoBarras").value;
 		var valor2 = document.getElementById("cantE").value;
 
 		if (valor2 != ""){
@@ -46,13 +49,20 @@
 			var valoresAceptados = /^[0-9]+$/;
 			if (valor2.match(valoresAceptados)){
 				//alert ("Es numérico");
-				return true;
+				//return true;
 			} else {
          		alert ("La cantidad debe ser numérica");
          		return false;
     		}
 
 		}
+
+	    if (confirm('¿Estas seguro de sacar ' + valor2 + ' elementos con el siguiente código de barras ' + valor1 + '?')){
+	       	return true;
+	    }
+	    else{
+	    	return false;
+	    }
 	}
 
 </script>

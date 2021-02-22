@@ -92,7 +92,13 @@
 				return false;
 			}
 		}
-		return true;
+
+	    if (confirm('¿Estas seguro de insertar ' + valor1 + ' elementos con el siguiente código de barras ' + valor2 + '?')){
+	       	return true;
+	    }
+	    else{
+	    	return false;
+	    }
 	}
 
 </script>
